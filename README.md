@@ -15,16 +15,16 @@ This plugin is not standalone. It requires integration with other plugins, such 
 Configure the time between messages via the pl_chat_time cvar.
 Dependencies
 This plugin requires the following additional plugins to function correctly:
-**OciXCrom's Chat Manager [Admin Prefix & Color Chat].
-[INC] CromChat - a better ColorChat! (include).**
+1. **OciXCrom's Chat Manager [Admin Prefix & Color Chat].
+2. [INC] CromChat - a better ColorChat! (include).**
 
 ## **Cvars**
-pl_chat_time - Defines the minimum time (in seconds) between sending two consecutive messages by the same player.
+**`pl_chat_time`** - Defines the minimum time (in seconds) between sending two consecutive messages by the same player.
 
 ## **Commands**
-radio1 - Opens the Information messages menu.
-radio2 - Opens the Compliments messages menu.
-radio3 - Opens the Reactions messages menu.
+**radio1** - Opens the Information messages menu.
+**radio2** - Opens the Compliments messages menu.
+**radio3** - Opens the Reactions messages menu.
 
 ## **Usage**
-Players can use the radio commands, keys: **(Z, X, C)** to open the quick message menus and select the desired message.
+Players can use the radio commands, **`keys:** **(Z, X, C)`** to open the quick message menus and select the desired message.
