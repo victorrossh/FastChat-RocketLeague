@@ -27,4 +27,4 @@ This plugin requires the following additional plugins to function correctly:
 3. **radio3** - Opens the Reactions messages menu.
 
 ## **Usage**
-Players can use the radio commands, **`keys:** **(Z, X, C)`** to open the quick message menus and select the desired message.
+Players can use the radio commands, **`keys: (Z, X, C)`** to open the quick message menus and select the desired message.
