@@ -4,7 +4,7 @@
 The **Rocket League - Fast Chat** plugin for AMX Mod X is designed to facilitate quick communication in the game Counter-Strike 1.6, inspired by Rocket League's quick messages. It allows players to send predefined messages via radio commands, aiding in coordination and interaction during matches.
 
 ## **Note:** 
-This plugin is not standalone. It requires integration with other plugins, such as OciXCrom's Chat Manager [Admin Prefix & Color Chat], available on AlliedModders.
+This plugin is not standalone. It requires integration with other plugins, such as **OciXCrom's Chat Manager [Admin Prefix & Color Chat]**, available on AlliedModders.
 
 ## **Features**
 - Quick sending of predefined messages.
