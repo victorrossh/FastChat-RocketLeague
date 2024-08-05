@@ -9,15 +9,14 @@ This plugin is not standalone. It requires integration with other plugins, such 
 ## **Features**
 - Quick sending of predefined messages.
 - Three categories of messages: Information, Compliments, and Reactions.
-- Colored messages with custom prefixes.
 
 ## **Configuration**
 
 Configure the time between messages via the pl_chat_time cvar.
 Dependencies
 This plugin requires the following additional plugins to function correctly:
-**OciXCrom's Chat Manager [Admin Prefix & Color Chat].**
-**[INC] CromChat - a better ColorChat! (include).**
+**OciXCrom's Chat Manager [Admin Prefix & Color Chat].
+[INC] CromChat - a better ColorChat! (include).**
 
 ## **Cvars**
 pl_chat_time - Defines the minimum time (in seconds) between sending two consecutive messages by the same player.
