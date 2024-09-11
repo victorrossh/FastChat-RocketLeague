@@ -3,7 +3,7 @@
 #include <cromchat2>
 
 #define PLUGIN "Rocket League - Chat Rapido"
-#define VERSION "1.3"
+#define VERSION "1.4"
 #define AUTHOR "WESPEOOTY && ftl"
 
 #define MENU_INFO 7
@@ -15,9 +15,24 @@
 new Float:g_fLastMessageTime[33];
 new xCvarTime;
 
+new const trFormat[][30] = 
+{
+	"&x04%s &x07%s &x01: &x04%s",
+	"&x07%s &x01: &x04%s",
+	"&x04%s &x07%s &x01: %s",
+	"&x07%s &x01: %s"
+}
+
+new const ctFormat[][30] = 
+{
+	"&x04%s &x06%s &x01: &x04%s",
+	"&x06%s &x01: &x04%s",
+	"&x04%s &x06%s &x01: %s",
+	"&x06%s &x01: %s"
+}
+
 new const szMenuMessages[][30] =
 {
-	// MENU INFO
 	"gg!",
 	"Foi divertido!",
 	"Deixa comigo!",
@@ -26,7 +41,6 @@ new const szMenuMessages[][30] =
 	"Estou na defesa!",
 	"Fake!",
 	
-	// MENU ELOGIOS
 	"Belo chute!",
 	"Ã“timo passe!",
 	"Bem jogado!",
@@ -35,7 +49,6 @@ new const szMenuMessages[][30] =
 	"What a save!",
 	"Nice block!",
 	
-	//MENU REACTION
 	"$#@%!",
 	"Sem problema!",
 	"Meu Deus!",
@@ -73,28 +86,28 @@ public cmdSayMessage(id, menu, item)
 	new Float:timeCount = currentTime - g_fLastMessageTime[id];
 	new Float:requiredTime = get_pcvar_float(xCvarTime);
 	
-	switch(get_user_team(id))
+	new userTeam = get_user_team(id);
+	
+	if(userTeam > 0 && userTeam < 3)
 	{
-		case 1:
+		if(timeCount >= requiredTime)
 		{
-			if(timeCount >= requiredTime)
+			g_fLastMessageTime[id] = currentTime;
+			switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
 			{
-				g_fLastMessageTime[id] = currentTime;
-				switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
+				case ADMIN_RESERVATION:
 				{
-					case ADMIN_RESERVATION:
-					{
-						if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x04%s &x07%s &x01: &x04%s", xPrefixName, szName, szMenuMessages[item]);
-						else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x07%s &x01: &x04%s", szName, szMenuMessages[item]);
-						else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x04%s &x07%s &x01: %s", xPrefixName, szName, szMenuMessages[item]);
-						else
-							CC_SendMessage(0, "&x07%s &x01: %s", szName, szMenuMessages[item]);
+					if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+						CC_SendMessage(0, userTeam == 1 ? trFormat[0] : ctFormat[0], xPrefixName, szName, szMenuMessages[item]);
+					else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+						CC_SendMessage(0, userTeam == 1 ? trFormat[1] : ctFormat[1], szName, szMenuMessages[item]);
+					else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+						CC_SendMessage(0, userTeam == 1 ? trFormat[2] : ctFormat[2], xPrefixName, szName, szMenuMessages[item]);
+					else
+						CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
 					}
 					case ADMIN_USER:
-						CC_SendMessage(0, "&x07%s &x01: %s", szName, szMenuMessages[item]);
+						CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
 				}
 			}
 			else
@@ -103,93 +116,28 @@ public cmdSayMessage(id, menu, item)
 				if(remainingTime > 0.0)
 					CC_SendMessage(id, "&x04[FWO] &x01Espere &x04%3.1f &x01segundos...", remainingTime);
 			}
-		}
-		case 2:
-		{
-			if(timeCount >= requiredTime)
-			{
-				g_fLastMessageTime[id] = currentTime;
-				switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
-				{
-					case ADMIN_RESERVATION:
-					{
-						if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x04%s &x06%s &x01: &x04%s", xPrefixName, szName, szMenuMessages[item]);
-						else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x06%s &x01: &x04%s", szName,szMenuMessages[item]);
-						else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
-							CC_SendMessage(0, "&x04%s &x06%s &x01: %s", xPrefixName, szName, szMenuMessages[item]);
-						else
-							CC_SendMessage(0, "&x06%s &x01: %s", szName, szMenuMessages[item]);
-					}
-					case ADMIN_USER:
-						CC_SendMessage(0, "&x06%s &x01: %s", szName, szMenuMessages[item]);
-				}
-			}
-			else
-			{
-				new Float:remainingTime = (requiredTime + 0.2) - timeCount;
-				if(remainingTime > 0.0)
-					CC_SendMessage(id, "&x04[FWO] &x01Espere &x04%3.1f &x01segundos...", remainingTime);
-			}
-		}
-		default:
-		{
-			if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-				CC_SendMessage(0, "&x04%s &x03%s &x01: &x04%s", xPrefixName, szName, szMenuMessages[item]);
-			else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-				CC_SendMessage(0, "&x03%s &x01: &x04%s", szName, szMenuMessages[item]);
-			else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
-				CC_SendMessage(0, "&x04%s &x03%s &x01: %s", xPrefixName, szName, szMenuMessages[item]);
-			else
-				CC_SendMessage(0, "&x03%s &x01: %s", szName,szMenuMessages[item]);
-		}
 	}
+	else
+	{
+		if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+			CC_SendMessage(0, "&x04%s &x03%s &x01: &x04%s", xPrefixName, szName, szMenuMessages[item]);
+		else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+			CC_SendMessage(0, "&x03%s &x01: &x04%s", szName, szMenuMessages[item]);
+		else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+			CC_SendMessage(0, "&x04%s &x03%s &x01: %s", xPrefixName, szName, szMenuMessages[item]);
+		else
+			CC_SendMessage(0, "&x03%s &x01: %s", szName,szMenuMessages[item]);
+	}
+	
 	client_cmd(id, "speak buttons/lightswitch2");
 	menu_destroy(menu);
-}
-
-public handInfo(id, menu, item)
-{
-	if(item == MENU_EXIT)
-	{
-		menu_destroy(menu); 
-		return  PLUGIN_HANDLED;
-	}
-
-	cmdSayMessage(id, menu, item);
-	return PLUGIN_HANDLED;
-}
-
-public handElogios(id, menu, item)
-{
-	if(item == MENU_EXIT)
-	{
-		menu_destroy(menu);
-		return PLUGIN_HANDLED;
-	}
-
-	cmdSayMessage(id, menu, item + MENU_INFO);
-	return PLUGIN_HANDLED;
-}
-
-public handReaction(id, menu, item)
-{
-	if(item == MENU_EXIT)
-	{
-		menu_destroy(menu);
-		return PLUGIN_HANDLED;
-	}
-
-	cmdSayMessage(id, menu, item + MENU_ELOGIOS + MENU_INFO);
-	return PLUGIN_HANDLED;
 }
 
 public cmdInfo(id)
 {
 	if(get_user_team(id) > 2)
 	{
-		CC_SendMessage(id, "&x04[FWO] &x01VocÃª nÃ£o pode acessar este menu estando de SPEC.");
+		CC_SendMessage(id, "&x04[FWO] &x01VocÃƒÂª nÃƒÂ£o pode acessar este menu estando de SPEC.");
 		client_cmd(id, "speak buttons/button10");
 		return PLUGIN_HANDLED;
 	}
@@ -210,11 +158,23 @@ public cmdInfo(id)
 	return PLUGIN_HANDLED;
 }
 
+public handInfo(id, menu, item)
+{
+	if(item == MENU_EXIT)
+	{
+		menu_destroy(menu); 
+		return  PLUGIN_HANDLED;
+	}
+
+	cmdSayMessage(id, menu, item);
+	return PLUGIN_HANDLED;
+}
+
 public cmdElogios(id)
 {
 	if(get_user_team(id) > 2)
 	{
-		CC_SendMessage(id, "&x04[FWO] &x01VocÃª nÃ£o pode acessar este menu estando de SPEC.");
+		CC_SendMessage(id, "&x04[FWO] &x01VocÃƒÂª nÃƒÂ£o pode acessar este menu estando de SPEC.");
 		client_cmd(id, "speak buttons/button10");
 		return PLUGIN_HANDLED;
 	}
@@ -235,11 +195,23 @@ public cmdElogios(id)
 	return PLUGIN_HANDLED;
 }
 
+public handElogios(id, menu, item)
+{
+	if(item == MENU_EXIT)
+	{
+		menu_destroy(menu);
+		return PLUGIN_HANDLED;
+	}
+
+	cmdSayMessage(id, menu, item + MENU_INFO);
+	return PLUGIN_HANDLED;
+}
+
 public cmdReaction(id)
 {
 	if(get_user_team(id) > 2)
 	{
-		CC_SendMessage(id, "&x04[FWO] &x01VocÃª nÃ£o pode acessar este menu estando de SPEC.");
+		CC_SendMessage(id, "&x04[FWO] &x01VocÃƒÂª nÃƒÂ£o pode acessar este menu estando de SPEC.");
 		client_cmd(id, "speak buttons/button10");
 		return PLUGIN_HANDLED;
 	}
@@ -257,5 +229,17 @@ public cmdReaction(id)
 	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
 
+	return PLUGIN_HANDLED;
+}
+
+public handReaction(id, menu, item)
+{
+	if(item == MENU_EXIT)
+	{
+		menu_destroy(menu);
+		return PLUGIN_HANDLED;
+	}
+
+	cmdSayMessage(id, menu, item + MENU_ELOGIOS + MENU_INFO);
 	return PLUGIN_HANDLED;
 }
