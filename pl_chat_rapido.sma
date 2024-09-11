@@ -1,30 +1,63 @@
 #include <amxmodx>
+#include <chatmanager>
 
 #define PLUGIN "Rocket League - Chat Rapido"
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define AUTHOR "WESPEOOTY && ftl"
 
 #define PREFIX_MENU "\r[FWO]"
+
+new const szMenuInfo[][33] =
+{
+	"gg!",
+	"Foi divertido!",
+	"Deixa comigo!",
+	"Preciso de impulsÃ£o!",
+	"Chute!",
+	"Estou na defesa!"
+};
+
+new const szMenuElogios[][33] =
+{
+	"Belo chute!",
+	"Ã“timo passe!",
+	"Bem jogado!",
+	"Obrigado!",
+	"Nice bump!",
+	"What a save!"
+};
+
+new const szMenuReaction[][33] =
+{
+	"$#@%!",
+	"Sem problema!",
+	"Meu Deus!",
+	"NÃ£Ã£Ã£oooo!",
+	"Uau!",
+	"Essa foi por pouco!",
+	"Sinto muito!"
+};
 
 public plugin_init()
 {
 	register_plugin(PLUGIN, VERSION, AUTHOR);
 		
-	register_clcmd("say /slot1", "cmdInfo");
-	register_clcmd("say /slot2", "cmdElogios");
-	register_clcmd("say /slot3", "cmdReaction");
-	register_clcmd("say /slot4", "cmdSorry");
+	register_clcmd("radio1", "cmdInfo");
+	register_clcmd("radio2", "cmdElogios");
+	register_clcmd("radio3", "cmdReaction");
 }
 
 public cmdInfo(id)
 {
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wMenu de Informações", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wInformaÃ§Ãµes", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handInfo");
 
-	menu_additem(menu, "Deixa comigo!", "1");
-	menu_additem(menu, "Chute!", "2");
-	menu_additem(menu, "Estou na defesa!", "3");
+	for(new i = 0; i < sizeof szMenuInfo; i++)
+	{
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuInfo[i]);
+		menu_additem(menu, szMenuTitle, "");
+	}
 
 	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
@@ -42,24 +75,20 @@ public handInfo(id, menu, item)
 	new szName[32];
 	get_user_name(id, szName, charsmax(szName));
 
-	switch(item)
-	{
-		case 0:
-		{
-			ChatColor(0, "!t%s !y: Deixa comigo!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 1:
-		{
-			ChatColor(0, "!t%s !y: Chute!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 2:
-		{
-			ChatColor(0, "!t%s !y: Estou na defesa!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-	}
+	new xPrefixName[32];
+	cm_get_user_prefix(id, xPrefixName, charsmax(xPrefixName));
+	
+	if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !g%s", xPrefixName, szName, szMenuInfo[item]);
+	else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!t%s !y: !g%s", szName, szMenuInfo[item]);
+	else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !y%s", xPrefixName, szName, szMenuInfo[item]);
+	else
+		ChatColor(0, "!t%s !y: %s", szName, szMenuInfo[item]);
+	
+	client_cmd(id, "speak buttons/lightswitch2");
+	
 	menu_destroy(menu);
 	return PLUGIN_HANDLED;
 }
@@ -67,13 +96,14 @@ public handInfo(id, menu, item)
 public cmdElogios(id)
 {
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wMenu de Elogios", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wElogios", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handElogios");
 
-	menu_additem(menu, "Belo chute!", "1");
-	menu_additem(menu, "Ótimo passe!", "2");
-	menu_additem(menu, "Obrigado!", "3");
-	menu_additem(menu, "What a save!", "4");
+	for(new i = 0; i < sizeof szMenuElogios; i++)
+	{
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuElogios[i]);
+		menu_additem(menu, szMenuTitle, "");
+	}
 
 	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
@@ -90,30 +120,21 @@ public handElogios(id, menu, item)
 	
 	new szName[32];
 	get_user_name(id, szName, charsmax(szName));
+	
+	new xPrefixName[32];
+	cm_get_user_prefix(id, xPrefixName, charsmax(xPrefixName));
+	
+	if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !g%s", xPrefixName, szName, szMenuElogios[item]);
+	else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!t%s !y: !g%s", szName, szMenuElogios[item]);
+	else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !y%s", xPrefixName, szName, szMenuElogios[item]);
+	else
+		ChatColor(0, "!t%s !y: %s", szName, szMenuElogios[item]);
 
-	switch(item)
-	{
-		case 0:
-		{
-			ChatColor(0, "!t%s !y: Belo chute!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 1:
-		{
-			ChatColor(0, "!t%s !y: Ótimo passe!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 2:
-		{
-			ChatColor(0, "!t%s !y: Obrigado!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 3:
-		{
-			ChatColor(0, "!t%s !y: What a save!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-	}
+	client_cmd(id, "speak buttons/lightswitch2");
+	
 	menu_destroy(menu);
 	return PLUGIN_HANDLED;
 }
@@ -121,13 +142,14 @@ public handElogios(id, menu, item)
 public cmdReaction(id)
 {
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wMenu de Reações", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wReaÃ§Ãµes", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handReaction");
 
-	menu_additem(menu, "Meu Deus!", "1");
-	menu_additem(menu, "Nãããoooo!", "2");
-	menu_additem(menu, "Uau!", "3");
-	menu_additem(menu, "Essa foi por pouco!", "4");
+	for(new i = 0; i < sizeof szMenuReaction; i++)
+	{
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuReaction[i]);
+		menu_additem(menu, szMenuTitle, "");
+	}
 
 	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
@@ -145,83 +167,20 @@ public handReaction(id, menu, item)
 	new szName[32];
 	get_user_name(id, szName, charsmax(szName));
 
-	switch(item)
-	{
-		case 0:
-		{
-			ChatColor(0, "!t%s !y: Meu Deus!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 1:
-		{
-			ChatColor(0, "!t%s !y: Nãããoooo!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 2:
-		{
-			ChatColor(0, "!t%s !y: Uau!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 3:
-		{
-			ChatColor(0, "!t%s !y: Essa foi por pouco!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-	}
-	menu_destroy(menu);
-	return PLUGIN_HANDLED;
-}
-
-public cmdSorry(id)
-{
-	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wMenu de Desculpas", PREFIX_MENU);
-	new menu = menu_create(szMenuTitle, "handSorry");
-
-	menu_additem(menu, "$#@%!", "1");
-	menu_additem(menu, "Sem problema!", "2");
-	menu_additem(menu, "Opa...", "3");
-	menu_additem(menu, "Sinto muito!", "4");
-
-	menu_setprop(menu, MPROP_EXITNAME, "Sair");
-	menu_display(id, menu, 0);
-
-	return PLUGIN_HANDLED;
-}
-
-public handSorry(id, menu, item)
-{
-	if(item == MENU_EXIT)
-	{
-		menu_destroy(menu); return PLUGIN_HANDLED;
-	}
+	new xPrefixName[32];
+	cm_get_user_prefix(id, xPrefixName, charsmax(xPrefixName));
 	
-	new szName[32];
-	get_user_name(id, szName, charsmax(szName));
-
-	switch(item)
-	{
-		case 0:
-		{
-			ChatColor(0, "!t%s !y: $#@%!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 1:
-		{
-			ChatColor(0, "!t%s !y: Sem problema!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 2:
-		{
-			ChatColor(0, "!t%s !y: Opa...", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-		case 3:
-		{
-			ChatColor(0, "!t%s !y: Sinto muito!", szName);
-			client_cmd(id, "speak buttons/lightswitch2");
-		}
-	}
+	if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !g%s", xPrefixName, szName, szMenuReaction[item]);
+	else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+		ChatColor(0, "!t%s !y: !g%s", szName, szMenuReaction[item]);
+	else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+		ChatColor(0, "!g%s !t%s !y: !y%s", xPrefixName, szName, szMenuReaction[item]);
+	else
+		ChatColor(0, "!t%s !y: %s", szName, szMenuReaction[item]);
+		
+	client_cmd(id, "speak buttons/lightswitch2");
+	
 	menu_destroy(menu);
 	return PLUGIN_HANDLED;
 }
@@ -250,6 +209,3 @@ stock ChatColor(const id, const input[], any:...)
 		}
 	}
 }
-/* AMXX-Studio Notes - DO NOT MODIFY BELOW HERE
-*{\\ rtf1\\ ansi\\ deff0{\\ fonttbl{\\ f0\\ fnil Tahoma;}}\n\\ viewkind4\\ uc1\\ pard\\ lang1046\\ f0\\ fs16 \n\\ par }
-*/
