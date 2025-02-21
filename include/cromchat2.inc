@@ -229,16 +229,14 @@ stock CC_SendMessage(id, const input[], any:...)
 			return 0
 		}
 	}
-
+	
 	static szMessage[CC_MAX_MESSAGE_SIZE]
 	
 	
 	if(id)
 	{
-		
 		vformat(szMessage[1], charsmax(szMessage), input, 3)
-		format_message(szMessage)
-		
+		_CC_FormatMessage(szMessage)
 		_CC_WriteMessage(id, szMessage)
 	}
 	else
@@ -247,7 +245,7 @@ stock CC_SendMessage(id, const input[], any:...)
 		{
 			SetGlobalTransTarget(iPlayers[i]);
 			vformat(szMessage[1], charsmax(szMessage), input, 3)
-			format_message(szMessage)
+			_CC_FormatMessage(szMessage)
 			_CC_WriteMessage(iPlayers[i], szMessage)
 		}
 	}
@@ -258,8 +256,9 @@ stock CC_SendMessage(id, const input[], any:...)
 	return strlen(szMessage)
 }
 
-stock format_message(szMessage[CC_MAX_MESSAGE_SIZE]) {
-	new bool:bNoPrefix, i
+stock _CC_FormatMessage(szMessage[CC_MAX_MESSAGE_SIZE]) 
+{
+	static bool:bNoPrefix, i
 	szMessage[0] = 0x01
 	
 	bNoPrefix = bool:(equal(szMessage[1], CC_NO_PREFIX, charsmax(CC_NO_PREFIX)) || equal(szMessage[2], CC_NO_PREFIX, charsmax(CC_NO_PREFIX)))
@@ -916,7 +915,6 @@ stock _CC_WriteMessage(id, const message[])
 
 	write_string(CC_PLAYER_ITEM_PHRASE) 
 	write_string(message)
-
 	message_end()
 }
 
