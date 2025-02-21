@@ -95,37 +95,37 @@ public resetMessageCount(arg[])
 
 public cmdSayMessage(id, menu, item)
 {
-	new szName[32];
-	get_user_name(id, szName, charsmax(szName));
+    new szName[32];
+    get_user_name(id, szName, charsmax(szName));
 
-	new xPrefixName[32];
-	cm_get_user_prefix(id, xPrefixName, charsmax(xPrefixName));
-	
-	new arg[1];
-	arg[0] = id;
-	
-	new Float:currentTime = get_gametime();
-	new Float:timeCount = currentTime - g_fLastMessageTime[id];
-	new Float:requiredTime = get_pcvar_float(cvar_countdown);
-	new sequenceMessage = get_pcvar_num(cvar_sequence_message);
-	
-	new userTeam = get_user_team(id);
-	if(userTeam > 0 && userTeam < 3)
-	{
-		if(g_iMessageCount[id] < sequenceMessage)
-		{
-			switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
-			{
+    new xPrefixName[32];
+    cm_get_user_prefix(id, xPrefixName, charsmax(xPrefixName));
+    
+    new arg[1];
+    arg[0] = id;
+    
+    new Float:currentTime = get_gametime();
+    new Float:timeCount = currentTime - g_fLastMessageTime[id];
+    new Float:requiredTime = get_pcvar_float(cvar_countdown);
+    new sequenceMessage = get_pcvar_num(cvar_sequence_message);
+    
+    new userTeam = get_user_team(id);
+    if(userTeam > 0 && userTeam < 3)
+    {
+        if(g_iMessageCount[id] < sequenceMessage)
+        {
+            switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
+            {
 				case ADMIN_RESERVATION:
 				{
 					if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-						CC_SendMessage(0, userTeam == 1 ? trFormat[0] : ctFormat[0], xPrefixName, szName, szMenuMessages[item]);
+				    	CC_SendMessage(0, userTeam == 1 ? trFormat[0] : ctFormat[0], xPrefixName, szName, szMenuMessages[item]);
 					else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
 						CC_SendMessage(0, userTeam == 1 ? trFormat[1] : ctFormat[1], szName, szMenuMessages[item]);
-					else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+				    else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
 						CC_SendMessage(0, userTeam == 1 ? trFormat[2] : ctFormat[2], xPrefixName, szName, szMenuMessages[item]);
-					else
-						CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
+				    else
+					CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
 				}
 				case ADMIN_USER:
 					CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
@@ -142,27 +142,24 @@ public cmdSayMessage(id, menu, item)
 		}
 		else
 		{
-			if(g_fLastMessageTime[id] == 0.0) 
+		if(g_fLastMessageTime[id] == 0.0) 
 				g_fLastMessageTime[id] = currentTime;
-			
+            
 			timeCount = currentTime - g_fLastMessageTime[id];
 			if(timeCount >= requiredTime) 
 			{
 				g_fLastMessageTime[id] = 0.0;
 				g_iMessageCount[id] = 0;
-				
+
 				remove_task(id);
 				cmdSayMessage(id, menu, item);
 				return PLUGIN_HANDLED;
 			} 
-			else
-			{
-				remove_task(id);
-				new Float:remainingTime = requiredTime - timeCount;
-				
-				CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
-				client_cmd(id, "speak buttons/lightswitch2");
-			}
+
+			remove_task(id);
+			new Float:remainingTime = requiredTime - timeCount;     
+			CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
+			client_cmd(id, "speak buttons/lightswitch2");
 		}
 	}
 	else
