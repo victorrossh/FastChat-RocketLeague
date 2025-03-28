@@ -36,31 +36,31 @@ new const ctFormat[][30] =
 	"&x06%s &x01: %s"
 };
 
-new const szMenuMessages[][30] =
+new const szMenuMessages[][32] = 
 {
-	"gg!",
-	"Foi divertido!",
-	"Deixa comigo!",
-	"Preciso de impulsão!",
-	"Chute!",
-	"Estou na defesa!",
-	"Fake!",
-	
-	"Belo chute!",
-	"Ótimo passe!",
-	"Bem jogado!",
-	"Obrigado!",
-	"Nice bump!",
-	"What a save!",
-	"Nice block!",
-	
-	"$#@%!",
-	"Sem problema!",
-	"Meu Deus!",
-	"Nãããoooo!",
-	"Uau!",
-	"Essa foi por pouco!",
-	"Sinto muito!"
+	"QUICK_CHAT_GG",
+	"QUICK_CHAT_WAS_FUN",
+	"QUICK_CHAT_LEAVE_IT_TO_ME",
+	"QUICK_CHAT_NEED_BOOST",
+	"QUICK_CHAT_SHOT",
+	"QUICK_CHAT_DEFENDING",
+	"QUICK_CHAT_FAKE",
+
+	"QUICK_CHAT_NICE_SHOT",
+	"QUICK_CHAT_GREAT_PASS",
+	"QUICK_CHAT_WELL_PLAYED",
+	"QUICK_CHAT_THANKS",
+	"QUICK_CHAT_NICE_BUMP",
+	"QUICK_CHAT_WHAT_A_SAVE",
+	"QUICK_CHAT_NICE_BLOCK",
+
+	"QUICK_CHAT_OOPS",
+	"QUICK_CHAT_NO_PROBLEM",
+	"QUICK_CHAT_MY_GOD",
+	"QUICK_CHAT_NOOOO",
+	"QUICK_CHAT_WOW",
+	"QUICK_CHAT_CLOSE_ONE",
+	"QUICK_CHAT_SORRY"
 };
 
 public plugin_init()
@@ -74,6 +74,10 @@ public plugin_init()
 	register_clcmd("radio1", "cmdInfo");
 	register_clcmd("radio2", "cmdElogios");
 	register_clcmd("radio3", "cmdReaction");
+}
+
+public plugin_cfg(){
+	register_dictionary("quick_chat.txt");
 }
 
 public plugin_precache()
@@ -114,29 +118,36 @@ public cmdSayMessage(id, menu, item)
 	{
 		if(g_iMessageCount[id] < sequenceMessage)
 		{
-			switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
-			{
-				case ADMIN_RESERVATION:
+			new players[32], num;
+			get_players(players, num, "ch"); // Ignore bots
+			new message[254];
+			for (new i = 0; i < num; i++) {
+				new target = players[i];
+				LookupLangKey(message, charsmax(message), szMenuMessages[item], target);
+				switch(get_user_flags(id) & (ADMIN_RESERVATION | ADMIN_USER))
 				{
-					if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-						CC_SendMessage(0, userTeam == 1 ? trFormat[0] : ctFormat[0], xPrefixName, szName, szMenuMessages[item]);
-					else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
-						CC_SendMessage(0, userTeam == 1 ? trFormat[1] : ctFormat[1], szName, szMenuMessages[item]);
-					else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
-						CC_SendMessage(0, userTeam == 1 ? trFormat[2] : ctFormat[2], xPrefixName, szName, szMenuMessages[item]);
-					else
-						CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
+					case ADMIN_RESERVATION:
+					{
+						if(cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+							CC_SendMessage(target, userTeam == 1 ? trFormat[0] : ctFormat[0], xPrefixName, szName, message);
+						else if(!cm_get_user_prefix_status(id) && cm_get_user_chat_color_status(id))
+							CC_SendMessage(target, userTeam == 1 ? trFormat[1] : ctFormat[1], szName, message);
+						else if(cm_get_user_prefix_status(id) && !cm_get_user_chat_color_status(id))
+							CC_SendMessage(target, userTeam == 1 ? trFormat[2] : ctFormat[2], xPrefixName, szName, message);
+						else
+							CC_SendMessage(target, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, message);
+					}
+					case ADMIN_USER:
+						CC_SendMessage(target, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, message);
 				}
-				case ADMIN_USER:
-					CC_SendMessage(0, userTeam == 1 ? trFormat[3] : ctFormat[3], szName, szMenuMessages[item]);
 			}
 			g_iMessageCount[id]++;
 			if(!task_exists(id))
-				set_task_ex(get_pcvar_float(cvar_wait_restrict), "resetMessageCount",id, arg, sizeof(arg), SetTask_Once);
+				set_task_ex(get_pcvar_float(cvar_wait_restrict), "resetMessageCount", id, arg, sizeof(arg), SetTask_Once);
 			else
 			{
 				remove_task(id);
-				set_task_ex(get_pcvar_float(cvar_wait_restrict), "resetMessageCount",id, arg, sizeof(arg), SetTask_Once);
+				set_task_ex(get_pcvar_float(cvar_wait_restrict), "resetMessageCount", id, arg, sizeof(arg), SetTask_Once);
 			}
 			client_cmd(0, "spk ^"%s^"", quickSound);
 		}
@@ -156,10 +167,10 @@ public cmdSayMessage(id, menu, item)
 				return PLUGIN_HANDLED;
 			}
 
-				remove_task(id);
-				new Float:remainingTime = requiredTime - timeCount;
-				CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
-				client_cmd(id, "speak buttons/lightswitch2");
+			remove_task(id);
+			new Float:remainingTime = requiredTime - timeCount;
+			CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
+			client_cmd(id, "speak buttons/lightswitch2");
 		}
 	}
 	else
@@ -172,14 +183,17 @@ public cmdSayMessage(id, menu, item)
 }
 
 public cmdInfo(id)
-{	
+{    
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wInformações", PREFIX_MENU);
+	//formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wInformações", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%L", id, "MENU_INFORMATION", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handInfo");
 
+	new message[32];
 	for(new i = 0; i < MENU_INFO; i++)
 	{
-		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuMessages[i]);
+		LookupLangKey(message, charsmax(message), szMenuMessages[i], id);
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", message);
 		menu_additem(menu, szMenuTitle, "");
 	}
 
@@ -194,7 +208,7 @@ public handInfo(id, menu, item)
 	if(item == MENU_EXIT)
 	{
 		menu_destroy(menu); 
-		return  PLUGIN_HANDLED;
+		return PLUGIN_HANDLED;
 	}
 	cmdSayMessage(id, menu, item);
 	return PLUGIN_HANDLED;
@@ -203,12 +217,15 @@ public handInfo(id, menu, item)
 public cmdElogios(id)
 {
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wElogios", PREFIX_MENU);
+	//formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wElogios", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%L", id, "MENU_COMPLIMENT", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handElogios");
 
+	new message[32];
 	for(new i = MENU_INFO; i < MENU_ELOGIOS + MENU_INFO; i++)
 	{
-		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuMessages[i]);
+		LookupLangKey(message, charsmax(message), szMenuMessages[i], id);
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", message);
 		menu_additem(menu, szMenuTitle, "");
 	}
 
@@ -232,15 +249,18 @@ public handElogios(id, menu, item)
 public cmdReaction(id)
 {
 	new szMenuTitle[128];
-	formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wReações", PREFIX_MENU);
+	//formatex(szMenuTitle, charsmax(szMenuTitle), "%s \d- \wReações", PREFIX_MENU);
+	formatex(szMenuTitle, charsmax(szMenuTitle), "%L", id, "MENU_REACTION", PREFIX_MENU);
 	new menu = menu_create(szMenuTitle, "handReaction");
 
+	new message[32];
 	for(new i = MENU_ELOGIOS + MENU_INFO; i < MENU_REACTION + MENU_ELOGIOS + MENU_INFO; i++)
 	{
-		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", szMenuMessages[i]);
+		LookupLangKey(message, charsmax(message), szMenuMessages[i], id);
+		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", message);
 		menu_additem(menu, szMenuTitle, "");
 	}
-    
+	
 	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
 

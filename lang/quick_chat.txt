@@ -1,0 +1,80 @@
+[en]
+
+MENU_INFORMATION = %s \d- \wInformation
+MENU_COMPLIMENT = %s \d- \wCompliment
+MENU_REACTION = %s \d- \wReaction
+QUICK_CHAT_GG = gg!
+QUICK_CHAT_WAS_FUN = That was fun!
+QUICK_CHAT_LEAVE_IT_TO_ME = Leave it to me!
+QUICK_CHAT_NEED_BOOST = Need boost!
+QUICK_CHAT_SHOT = Shot!
+QUICK_CHAT_DEFENDING = Defending!
+QUICK_CHAT_FAKE = Fake!
+QUICK_CHAT_NICE_SHOT = Nice shot!
+QUICK_CHAT_GREAT_PASS = Great pass!
+QUICK_CHAT_WELL_PLAYED = Well played!
+QUICK_CHAT_THANKS = Thanks!
+QUICK_CHAT_NICE_BUMP = Nice bump!
+QUICK_CHAT_WHAT_A_SAVE = What a save!
+QUICK_CHAT_NICE_BLOCK = Nice block!
+QUICK_CHAT_OOPS = $#%@!
+QUICK_CHAT_NO_PROBLEM = No problem!
+QUICK_CHAT_MY_GOD = My God!
+QUICK_CHAT_NOOOO = Noooo!
+QUICK_CHAT_WOW = Wow!
+QUICK_CHAT_CLOSE_ONE = That was close!
+QUICK_CHAT_SORRY = Sorry!
+
+[bp]
+
+MENU_INFORMATION = %s \d- \wInformações
+MENU_COMPLIMENT = %s \d- \wElogios
+MENU_REACTION = %s \d- \wReações
+QUICK_CHAT_GG = gg!
+QUICK_CHAT_WAS_FUN = Foi divertido!
+QUICK_CHAT_LEAVE_IT_TO_ME = Deixa comigo!
+QUICK_CHAT_NEED_BOOST = Preciso de impulsão!
+QUICK_CHAT_SHOT = Chute!
+QUICK_CHAT_DEFENDING = Estou na defesa!
+QUICK_CHAT_FAKE = Fake!
+QUICK_CHAT_NICE_SHOT = Belo chute!
+QUICK_CHAT_GREAT_PASS = Ótimo passe!
+QUICK_CHAT_WELL_PLAYED = Bem jogado!
+QUICK_CHAT_THANKS = Obrigado!
+QUICK_CHAT_NICE_BUMP = Nice bump!
+QUICK_CHAT_WHAT_A_SAVE = Mas que defesa!
+QUICK_CHAT_NICE_BLOCK = Bom bloqueio!
+QUICK_CHAT_OOPS = $#%@!
+QUICK_CHAT_NO_PROBLEM = Sem problema!
+QUICK_CHAT_MY_GOD = Meu Deus!
+QUICK_CHAT_NOOOO = Nãããoooo!
+QUICK_CHAT_WOW = Uau!
+QUICK_CHAT_CLOSE_ONE = Essa foi por pouco!
+QUICK_CHAT_SORRY = Sinto muito!
+
+[pt]
+
+MENU_INFORMATION = %s \d- \wInformações
+MENU_COMPLIMENT = %s \d- \wElogios
+MENU_REACTION = %s \d- \wReações
+QUICK_CHAT_GG = gg!
+QUICK_CHAT_WAS_FUN = Foi divertido!
+QUICK_CHAT_LEAVE_IT_TO_ME = Deixa comigo!
+QUICK_CHAT_NEED_BOOST = Preciso de impulsão!
+QUICK_CHAT_SHOT = Chute!
+QUICK_CHAT_DEFENDING = Estou na defesa!
+QUICK_CHAT_FAKE = Fake!
+QUICK_CHAT_NICE_SHOT = Belo chute!
+QUICK_CHAT_GREAT_PASS = Ótimo passe!
+QUICK_CHAT_WELL_PLAYED = Bem jogado!
+QUICK_CHAT_THANKS = Obrigado!
+QUICK_CHAT_NICE_BUMP = Nice bump!
+QUICK_CHAT_WHAT_A_SAVE = Mas que defesa!
+QUICK_CHAT_NICE_BLOCK = Bom bloqueio!
+QUICK_CHAT_OOPS = $#%@!
+QUICK_CHAT_NO_PROBLEM = Sem problema!
+QUICK_CHAT_MY_GOD = Meu Deus!
+QUICK_CHAT_NOOOO = Nãããoooo!
+QUICK_CHAT_WOW = Uau!
+QUICK_CHAT_CLOSE_ONE = Essa foi por pouco!
+QUICK_CHAT_SORRY = Sinto muito!
