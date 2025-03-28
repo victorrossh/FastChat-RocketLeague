@@ -169,13 +169,15 @@ public cmdSayMessage(id, menu, item)
 
 			remove_task(id);
 			new Float:remainingTime = requiredTime - timeCount;
-			CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
+			//CC_SendMessage(id, "&x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.", remainingTime);
+			CC_SendMessage(id, "%L", id, "QUICK_CHAT_WAIT", remainingTime);
 			client_cmd(id, "speak buttons/lightswitch2");
 		}
 	}
 	else
 	{
-		CC_SendMessage(id, "&x04[FWO] &x01Você não pode enviar &x07Quick-Chat &x01estando de SPEC.");
+		//CC_SendMessage(id, "&x04[FWO] &x01Você não pode enviar &x07Quick-Chat &x01estando de SPEC.");
+		CC_SendMessage(id, "%L", id, "QUICK_CHAT_SPEC_RESTRICT");
 		client_cmd(id, "speak buttons/button10");
 	}
 	menu_destroy(menu);
@@ -197,9 +199,7 @@ public cmdInfo(id)
 		menu_additem(menu, szMenuTitle, "");
 	}
 
-	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
-
 	return PLUGIN_HANDLED;
 }
 
@@ -228,10 +228,8 @@ public cmdElogios(id)
 		formatex(szMenuTitle, charsmax(szMenuTitle), "%s", message);
 		menu_additem(menu, szMenuTitle, "");
 	}
-
-	menu_setprop(menu, MPROP_EXITNAME, "Sair");
+	
 	menu_display(id, menu, 0);
-
 	return PLUGIN_HANDLED;
 }
 
@@ -261,9 +259,7 @@ public cmdReaction(id)
 		menu_additem(menu, szMenuTitle, "");
 	}
 	
-	menu_setprop(menu, MPROP_EXITNAME, "Sair");
 	menu_display(id, menu, 0);
-
 	return PLUGIN_HANDLED;
 }
 

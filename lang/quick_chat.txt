@@ -24,6 +24,8 @@ QUICK_CHAT_NOOOO = Noooo!
 QUICK_CHAT_WOW = Wow!
 QUICK_CHAT_CLOSE_ONE = That was close!
 QUICK_CHAT_SORRY = Sorry!
+QUICK_CHAT_WAIT = &x04[FWO] &x01Wait &x07%3.1f &x01seconds to send another &x07Quick-Chat&x01.
+QUICK_CHAT_SPEC_RESTRICT = &x04[FWO] &x01You cannot send &x07Quick-Chat &x01while in SPEC.
 
 [bp]
 
@@ -51,6 +53,8 @@ QUICK_CHAT_NOOOO = Nãããoooo!
 QUICK_CHAT_WOW = Uau!
 QUICK_CHAT_CLOSE_ONE = Essa foi por pouco!
 QUICK_CHAT_SORRY = Sinto muito!
+QUICK_CHAT_WAIT = &x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.
+QUICK_CHAT_SPEC_RESTRICT = &x04[FWO] &x01Você não pode enviar &x07Quick-Chat &x01estando de SPEC.
 
 [pt]
 
@@ -78,3 +82,5 @@ QUICK_CHAT_NOOOO = Nãããoooo!
 QUICK_CHAT_WOW = Uau!
 QUICK_CHAT_CLOSE_ONE = Essa foi por pouco!
 QUICK_CHAT_SORRY = Sinto muito!
+QUICK_CHAT_WAIT = &x04[FWO] &x01Espere &x07%3.1f &x01segundos para enviar outro &x07Quick-Chat&x01.
+QUICK_CHAT_SPEC_RESTRICT = &x04[FWO] &x01Você não pode enviar &x07Quick-Chat &x01estando de SPEC.
